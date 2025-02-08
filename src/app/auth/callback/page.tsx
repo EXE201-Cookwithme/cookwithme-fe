@@ -1,6 +1,7 @@
 import { onAuthenticateUser } from "@/actions/user";
 import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 const AuthCallbackPage = async () => {
   const auth = await onAuthenticateUser();
   console.log(auth);

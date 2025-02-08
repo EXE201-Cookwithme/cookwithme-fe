@@ -1,6 +1,6 @@
 import { Dashboard } from "@/components/dashboard";
 import { Header } from "@/components/headerAdmin";
-
+export const runtime = "edge";
 type Props = {};
 const Page = (props: Props) => {
   return (

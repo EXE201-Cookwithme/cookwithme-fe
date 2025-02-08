@@ -12,7 +12,7 @@ type Props = {
     categoryId: string;
   };
 };
-
+export const runtime = "edge";
 const Page = ({ params: { categoryId } }: Props) => {
   const imageUrlLimoncello = `${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/20230206_112140.jpg`;
   return (

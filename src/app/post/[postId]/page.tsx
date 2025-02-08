@@ -4,6 +4,7 @@ import { BookMarked } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 type Props = {};
+export const runtime = "edge";
 const content = `## Ingredients:
 
 - 1 cup (8 oz) beer at room temperature or warmer (under 100°F)
