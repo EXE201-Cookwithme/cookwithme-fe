@@ -23,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
 type Props = {};
 const formSchema = z.object({
   title: z.string().min(5, {
@@ -38,9 +37,7 @@ const formSchema = z.object({
   category: z.string({
     required_error: "Please select a category.",
   }),
-  image: z
-    .instanceof(FileList)
-    .refine((files) => files.length > 0, "Image is required."),
+  image: z.any().refine((files) => files.length > 0, "Image is required."),
 });
 const Page = (props: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
