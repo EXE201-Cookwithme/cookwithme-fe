@@ -17,7 +17,7 @@ export const Footer = () => {
             </div>
           </div>
           <div className="w-[40%]">
-            <div className="grid grid-cols-3">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 md:gap-2 lg:gap-1">
               <div className="col-span-1">
                 <ul>
                   <li>

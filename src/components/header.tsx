@@ -1,36 +1,31 @@
-type Props = {};
+"use client";
 import { ChefHat } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { UserButton } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { Category } from "@/constants/types";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
-const fetchCategories = async () => {
-  try {
-    const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/category`, {
-      cache: "force-cache",
-    });
-    const res = await fetchData.json();
-    return res.data;
-  } catch (e) {
-    console.log(e);
-    toast.error("Error fetching categories");
-  }
+type Props = {
+  categories: Category[];
 };
-const Header = async (props: Props) => {
-  const categories: Category[] = await fetchCategories();
+const Header = ({ categories }: Props) => {
+  const pathname = usePathname();
+  const pathLogoImage = `${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/logo2-cookwithme.png`;
+
   return (
     <header className="bg-green-900">
       <div className="container py-6 w-[80%] mx-auto">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-5 md:gap-2 lg:gap-0">
           <Link href="/home">
-            <div className="flex items-center gap-2 text-white">
-              <ChefHat size={40} />
+            <div className="flex items-center  text-white">
+              <Image src={pathLogoImage} alt="logo" width={50} height={50} />
               <h2 className="font-bold text-3xl">Cookwithme</h2>
             </div>
           </Link>
-          <div className="flex flex-row gap-3 justify-center items-center">
+          <div className="flex flex-row gap-3 justify-center items-center ">
             <Link href="/home">
               <Button
                 variant={"secondary"}
@@ -51,15 +46,20 @@ const Header = async (props: Props) => {
           </div>
         </div>
         <div className="flex flex-row items-center justify-center mt-7 py-4">
-          <ul className="flex gap-6 text-white font-bold">
+          <ul className="flex flex-wrap justify-center lg:gap-6 md:gap-4 gap-3 text-white font-bold">
             {categories.map((category: Category, index) => {
+              const categoryPath = `/home/category/${category.name}`;
               return (
                 <li key={index}>
                   <Link
-                    href={`/home/category/${category.name}`}
-                    className="hover:underline underline-offset-4"
+                    href={categoryPath}
+                    className={`hover:underline underline-offset-4 ${
+                      pathname === categoryPath
+                        ? "text-yellow-400 underline-offset-8 underline decoration-6"
+                        : ""
+                    }`}
                   >
-                    {category.name}
+                    {category.name.split("-").join(" ")}
                   </Link>
                 </li>
               );

@@ -43,7 +43,9 @@ const Page = async ({ params: { categoryName } }: Props) => {
   const posts: Post[] = (await fetchPostByCategoryName(categoryName)) || [];
   return (
     <section className="mx-auto w-[80%] py-8">
-      <div className="text-3xl font-bold p-5">Category: {categoryName}</div>
+      <div className="text-3xl font-bold p-5">
+        Category: {categoryName.split("-").join(" ")}
+      </div>
       <div className="grid grid-cols-3 gap-6">
         {posts.length > 0 &&
           posts.map((p, index) => {
@@ -78,7 +80,7 @@ const Page = async ({ params: { categoryName } }: Props) => {
       </div>
       {posts.length === 0 && (
         <div className="flex flex-col gap-4 items-center justify-center min-h-[16rem]">
-          <Rabbit size={100} />
+          <Rabbit className="animate-bounce lg:size-38 md:size-20 size-10" />
           <p className="text-xl italic text-center">No posts ...</p>
         </div>
       )}

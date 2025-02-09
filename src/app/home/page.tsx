@@ -30,15 +30,13 @@ const fetchAllPost = async () => {
   }
 };
 
-
-
 const Page = async () => {
   const posts: Post[] = await fetchAllPost();
   return (
     <main className="flex-1">
       <section className="mx-auto w-[80%] py-8">
         <div className="text-3xl font-bold p-5">Recent articles</div>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
           {posts.map((post, index) => {
             return (
               <Card key={index}>

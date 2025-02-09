@@ -115,7 +115,7 @@ const Comment = ({ postId, clerkId }: Props) => {
                 <div className="col-span-10">
                   <div className="bg-white rounded-sm p-6">
                     <div className="flex flex-col gap-2">
-                      <div className="flex flex-row gap-2 justify-start items-center">
+                      <div className="flex flex-row gap-2 justify-start items-center flex-wrap">
                         <div>
                           <Image
                             src={comment.userId.image}
@@ -144,7 +144,7 @@ const Comment = ({ postId, clerkId }: Props) => {
         : "No comments"}
       <form
         onSubmit={handleSubmit}
-        className="w-[87%] flex flex-row gap-2 p-5 bg-white rounded-sm"
+        className="w-[87%] flex lg:flex-row gap-2 p-5 bg-white rounded-sm xs:flex-wrap"
       >
         <Input
           className="outline-none"
