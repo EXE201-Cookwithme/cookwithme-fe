@@ -24,7 +24,7 @@ const Header = async (props: Props) => {
     <header className="bg-green-900">
       <div className="container py-6 w-[80%] mx-auto">
         <div className="flex items-center justify-between">
-          <Link href="/">
+          <Link href="/home">
             <div className="flex items-center gap-2 text-white">
               <ChefHat size={40} />
               <h2 className="font-bold text-3xl">Cookwithme</h2>
