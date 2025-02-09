@@ -25,14 +25,6 @@ const Header = (props: Props) => {
                 Workshops
               </Button>
             </Link>
-            <Link href="/create">
-              <Button
-                variant={"secondary"}
-                className="bg-green-700 text-white hover:bg-green-800 "
-              >
-                Create Post
-              </Button>
-            </Link>
             <Link href="/">
               <Button className="text-base bg-green-700 text-white hover:bg-green-800 flex gap-x-2">
                 <User2Icon />
