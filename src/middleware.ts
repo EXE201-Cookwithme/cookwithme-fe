@@ -8,11 +8,7 @@ const corsOptions = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-const isProtectedRoutes = createRouteMatcher([
-  "/dashboard(.*)",
-  "/library(.*)",
-  "/createPost(.*)",
-]);
+const isProtectedRoutes = createRouteMatcher(["/home(.*)"]);
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   // Handle preflight requests
