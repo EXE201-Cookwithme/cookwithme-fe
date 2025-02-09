@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { toast } from "sonner";
-import { formatDate, Post } from "../../page";
-import { format } from "node:util";
 import { Rabbit } from "lucide-react";
+import { formatDate } from "@/lib/utils";
+import { Post } from "@/constants/types";
 type Props = {
   params: {
     categoryName: string;

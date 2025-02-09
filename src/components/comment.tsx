@@ -5,28 +5,13 @@ import { useQueryData } from "@/hooks/useQueryData";
 import { toast } from "sonner";
 import { UserPlan, UserRole } from "@/constants";
 import Image from "next/image";
-import { formatDate } from "@/app/home/page";
+
 import { useState } from "react";
 import { useMutationData } from "@/hooks/useMutationData";
 import Loader from "./loader";
-export interface User {
-  _id: string;
-  role: UserRole;
-  plan: UserPlan;
-  email: string;
-  firstname: string;
-  lastname: string;
-  image: string;
-  clerkid: string;
-  createdAt: Date;
-}
-export interface Comment {
-  _id: string;
-  userId: User;
-  postId: string;
-  content: string;
-  createAt: string;
-}
+import { formatDate } from "@/lib/utils";
+import { CommentPost, User } from "@/constants/types";
+
 type Props = {
   postId: string;
   clerkId: string | undefined;
@@ -87,7 +72,7 @@ const fetchUserByClerkId = async (clerkId: string) => {
 };
 const Comment = ({ postId, clerkId }: Props) => {
   const { data } = useQueryData(["get-comments"], () => fetchComments(postId));
-  const comments = (data as Comment[]) || [];
+  const comments = (data as CommentPost[]) || [];
   const [commentText, setCommentText] = useState("");
   const { data: dataUser } = useQueryData(["get-user"], () =>
     fetchUserByClerkId(clerkId as string)

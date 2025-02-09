@@ -4,10 +4,8 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { UserButton } from "@clerk/nextjs";
 import { toast } from "sonner";
-export interface Category {
-  _id: string;
-  name: string;
-}
+import { Category } from "@/constants/types";
+
 const fetchCategories = async () => {
   try {
     const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/category`, {

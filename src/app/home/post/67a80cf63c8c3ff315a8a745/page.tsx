@@ -1,10 +1,11 @@
 import Comment from "@/components/comment";
 import Recent from "@/components/rencent";
 import Image from "next/image";
-import { formatDate, Post } from "../../page";
+
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { currentUser, User } from "@clerk/nextjs/server";
+import { formatDate } from "@/lib/utils";
 const postId = "67a80cf63c8c3ff315a8a745";
 const fetchPostById = async () => {
   try {
@@ -181,6 +182,18 @@ const Page = async () => {
                 height={450}
               />
             </p>
+            <div className="mt-8 border-t border-b pb-6 pt-5">
+              <h2 className="text-xl font-bold mb-3">Related Links</h2>
+              <ul className="list-disc list-inside text-blue-600">
+                {post.links.map((link: string, index: number) => (
+                  <li key={index}>
+                    <a href={link} target="_blank" rel="noopener noreferrer">
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className="py-7 flex flex-col gap-8">

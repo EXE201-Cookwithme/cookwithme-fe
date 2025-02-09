@@ -6,23 +6,12 @@ import {
   CardHeader,
   CardImage,
 } from "@/components/ui/card";
+import { Post } from "@/constants/types";
+import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { toast } from "sonner";
 export const runtime = "nodejs";
-export interface Post {
-  _id: string;
-  images: string[];
-  title: string;
-  description: string;
-  author: string;
-  createAt: string;
-  categoryId: {
-    _id: string;
-    name: string;
-  };
-  categoryName: string;
-  links: string[];
-}
+
 const fetchAllPost = async () => {
   try {
     const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/post`, {
@@ -41,13 +30,7 @@ const fetchAllPost = async () => {
   }
 };
 
-export const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
+
 
 const Page = async () => {
   const posts: Post[] = await fetchAllPost();
