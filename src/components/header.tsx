@@ -1,12 +1,12 @@
 "use client";
-import { ChefHat } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { UserButton } from "@clerk/nextjs";
-import { toast } from "sonner";
 import { Category } from "@/constants/types";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useUserStore } from "@/store/userStore";
+import { UserPlan } from "@/constants";
 
 type Props = {
   categories: Category[];
@@ -14,7 +14,7 @@ type Props = {
 const Header = ({ categories }: Props) => {
   const pathname = usePathname();
   const pathLogoImage = `${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/logo2-cookwithme.png`;
-
+  const user = useUserStore((state) => state.user);
   return (
     <header className="bg-green-900">
       <div className="container py-6 w-[80%] mx-auto">

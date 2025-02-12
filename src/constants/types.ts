@@ -18,7 +18,7 @@ export interface Category {
   _id: string;
   name: string;
 }
-export interface User {
+export interface UserBe {
   _id: string;
   role: UserRole;
   plan: UserPlan;
@@ -31,7 +31,7 @@ export interface User {
 }
 export interface CommentPost {
   _id: string;
-  userId: User;
+  userId: UserBe;
   postId: string;
   content: string;
   createAt: string;

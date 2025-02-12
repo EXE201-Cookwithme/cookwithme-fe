@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useMutationData } from "@/hooks/useMutationData";
 import Loader from "./loader";
 import { formatDate } from "@/lib/utils";
-import { CommentPost, User } from "@/constants/types";
+import { CommentPost, UserBe } from "@/constants/types";
 
 type Props = {
   postId: string;
@@ -77,7 +77,7 @@ const Comment = ({ postId, clerkId }: Props) => {
   const { data: dataUser } = useQueryData(["get-user"], () =>
     fetchUserByClerkId(clerkId as string)
   );
-  const user = (dataUser as User) || {};
+  const user = (dataUser as UserBe) || {};
   const { mutate, isPending } = useMutationData(
     ["create-comment"],
     (data: { userId: string; postId: string; content: string }) =>

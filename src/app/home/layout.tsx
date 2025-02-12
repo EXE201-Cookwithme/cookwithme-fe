@@ -1,6 +1,9 @@
 import { Footer } from "@/components/footer";
 import Header from "@/components/header";
-import { Category } from "@/constants/types";
+import { Category, UserBe } from "@/constants/types";
+import UserProvider from "@/providers/UserProvider";
+import { currentUser, User } from "@clerk/nextjs/server";
+import React from "react";
 import { toast } from "sonner";
 
 type Props = { children: React.ReactNode };
@@ -16,14 +19,31 @@ const fetchCategories = async () => {
     toast.error("Error fetching categories");
   }
 };
+
+const fetchUserByClerkId = async (clerkId: string) => {
+  try {
+    const fetchData = await fetch(
+      `${process.env.NEXT_PUBLIC_BE}/user/${clerkId}`
+    );
+    const res = await fetchData.json();
+    return res.data;
+  } catch (e) {
+    console.log(e);
+    toast.error("Error fetching user by clerk id");
+  }
+};
 const Layout = async ({ children }: Props) => {
   const categories: Category[] = await fetchCategories();
+  const auth: User | null = await currentUser();
+  const user: UserBe = await fetchUserByClerkId(auth?.id as string);
   return (
-    <div className="flex flex-col min-h-screen bg-green-100">
-      <Header categories={categories} />
-      {children}
-      <Footer />
-    </div>
+    <UserProvider user={user}>
+      <div className="flex flex-col min-h-screen bg-green-100">
+        <Header categories={categories} />
+        {children}
+        <Footer />
+      </div>
+    </UserProvider>
   );
 };
 export default Layout;

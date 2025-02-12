@@ -33,7 +33,9 @@ const Modal = ({
       <DialogContent className={cn(className)}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogDescription className="text-xs">
+            {description}
+          </DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>

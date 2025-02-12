@@ -1,13 +1,16 @@
 "use client";
 import Modal from "@/components/modal";
+import PlanDetail from "@/components/plan-detail";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
+import { UserPlan } from "@/constants";
+import { UserBe } from "@/constants/types";
+import { useUserStore } from "@/store/userStore";
 
+import { Sparkles } from "lucide-react";
+import { useState } from "react";
 const Page = () => {
   const [open, setOpen] = useState(false);
-  const pathQrImage = `${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/payment-qr-demo.png`;
+  const user = useUserStore((state) => state.user);
   return (
     <section className="py-12 md:py-24 w-[60%] mx-auto">
       <div className="container px-4 md:px-6 mx-auto">
@@ -59,20 +62,26 @@ const Page = () => {
                 Unlimited slot on workshop online
               </li>
             </ul>
-            <Modal
-              open={open}
-              onOpenChange={setOpen}
-              className="max-w-sm md:max-w-md rounded-sm"
-              trigger={
-                <Button className="mt-auto bg-green-600 hover:bg-green-700">
-                  Choose Plan
-                </Button>
-              }
-              title="Payment"
-              description="Please OR code payment to continue."
-            >
-              <Image src={pathQrImage} alt="qrcode" width={500} height={500} />
-            </Modal>
+            {user?.plan === UserPlan.PRO ? (
+              <Button className="mt-auto bg-green-600" disabled>
+                You have already plan pro
+              </Button>
+            ) : (
+              <Modal
+                open={open}
+                onOpenChange={setOpen}
+                className="max-w-sm md:max-w-md rounded-sm"
+                trigger={
+                  <Button className="mt-auto bg-green-600 hover:bg-green-700">
+                    Choose Plan
+                  </Button>
+                }
+                title="Pro Plan - 59,000 VND/month"
+                description="Unlock a range of premium features designed to elevate your experience:"
+              >
+                <PlanDetail />
+              </Modal>
+            )}
           </div>
         </div>
       </div>
