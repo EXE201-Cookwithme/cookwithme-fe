@@ -1,3 +1,4 @@
+import Chatbot from "@/components/chatbot";
 import { Footer } from "@/components/footer";
 import Header from "@/components/header";
 import { Category, UserBe } from "@/constants/types";
@@ -38,10 +39,11 @@ const Layout = async ({ children }: Props) => {
   const user: UserBe = await fetchUserByClerkId(auth?.id as string);
   return (
     <UserProvider user={user}>
-      <div className="flex flex-col min-h-screen bg-green-100">
+      <div className="flex flex-col min-h-screen bg-green-100 relative">
         <Header categories={categories} />
         {children}
         <Footer />
+        <Chatbot />
       </div>
     </UserProvider>
   );

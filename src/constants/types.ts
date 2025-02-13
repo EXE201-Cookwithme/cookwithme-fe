@@ -36,3 +36,8 @@ export interface CommentPost {
   content: string;
   createAt: string;
 }
+
+export interface CookMessage {
+  role: "user" | "ai";
+  content: string;
+}
