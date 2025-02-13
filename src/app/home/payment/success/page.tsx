@@ -5,7 +5,7 @@ import { UserBe } from "@/constants/types";
 import { useUserStore } from "@/store/userStore";
 import { CircleCheckBig } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { use, useEffect, useRef } from "react";
 import { toast } from "sonner";
 const updatePlanUser = async (userId: string) => {
   try {
@@ -13,7 +13,7 @@ const updatePlanUser = async (userId: string) => {
       `${process.env.NEXT_PUBLIC_BE}/user/plan/${userId}`
     );
     const res = await handleApi.json();
-    console.log("Update plan user: ", res.data);
+
     return res.data;
   } catch (e) {
     console.log(e);
@@ -30,9 +30,21 @@ const PaymentSuccess = () => {
   const confettiRef = useRef<ConfettiRef>(null);
   const user = useUserStore((state) => state.user);
   useEffect(() => {
-    const updatePlan = async () => await updatePlanUser(user?._id as string);
-    updatePlan();
+    const updatePlan = async () => {
+      const hasUpdated = localStorage.getItem("planUpdated");
+
+      if (!hasUpdated) {
+        await updatePlanUser(user?._id as string);
+        localStorage.setItem("planUpdated", "true"); // Đánh dấu đã update
+        window.location.reload(); // Reload lại trang
+      }
+    };
+
+    if (user?._id) {
+      updatePlan();
+    }
   }, [user]);
+
   return (
     <div className=" relative flex flex-col items-center justify-center h-screen">
       <div className="flex flex-col items-center gap-7 bg-white p-8 rounded-lg shadow-md">

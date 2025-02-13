@@ -1,6 +1,7 @@
 import { CookMessage } from "@/constants/types";
 import LoadingDots from "./loading-dots";
 import { parseMarkdownToHTML } from "@/lib/utils";
+import { ChefHat, User } from "lucide-react";
 
 const Message = ({ role, content }: CookMessage) => {
   return (
@@ -10,10 +11,24 @@ const Message = ({ role, content }: CookMessage) => {
       }`}
     >
       <div
-        className={`flex lg:max-w-[17rem]  max-w-[15rem] items-end gap-2 overflow-x-auto rounded-lg ${
+        className={`flex max-w-[20rem] items-end gap-2 overflow-x-auto rounded-lg ${
           role === "user" ? "flex-row-reverse" : "flex-row"
         }`}
       >
+        <div className="flex flex-col items-center h-full">
+          <div
+            className={`flex p-2 rounded-full ${
+              role === "ai" ? "bg-gray-100" : "bg-green-700"
+            } `}
+          >
+            {role === "ai" ? (
+              <ChefHat />
+            ) : (
+              <User size={20} className="text-white" />
+            )}
+          </div>
+        </div>
+
         <div
           className={`rounded-lg p-3 shadow-md w-full ${
             role === "user" ? "bg-green-700 text-white" : "bg-gray-100"

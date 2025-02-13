@@ -43,7 +43,7 @@ const Layout = async ({ children }: Props) => {
         <Header categories={categories} />
         {children}
         <Footer />
-        <Chatbot />
+        <Chatbot user={user} />
       </div>
     </UserProvider>
   );

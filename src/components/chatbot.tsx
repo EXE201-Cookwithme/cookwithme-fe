@@ -2,9 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MessageCircle, Minus, Maximize, Minimize, Send } from "lucide-react";
-import { useUserStore } from "@/store/userStore";
 import { useListState } from "@mantine/hooks";
-import { CookMessage } from "@/constants/types";
+import { CookMessage, UserBe } from "@/constants/types";
 import { toast } from "sonner";
 import { useQueryData } from "@/hooks/useQueryData";
 
@@ -12,13 +11,18 @@ import { ScrollArea } from "./ui/scroll-area";
 import Message from "./message";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { UserPlan } from "@/constants";
+import { set } from "react-hook-form";
+import Modal from "./modal";
+import PlanDetail from "./plan-detail";
+import { useMutationData } from "@/hooks/useMutationData";
 
 const fetchConversation = async (userId: string) => {
   try {
     const handleApi = await fetch(
       `${process.env.NEXT_PUBLIC_BE}/conversation/${userId}`,
       {
-        cache: "no-cache",
+        cache: "force-cache",
       }
     );
     const res = await handleApi.json();
@@ -47,23 +51,30 @@ const sendMessage = async (userId: string, prompt: string) => {
     toast.error("Error sending message");
   }
 };
-const Chatbot = () => {
+type Props = {
+  user: UserBe | null;
+};
+const Chatbot = ({ user }: Props) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const user = useUserStore((state) => state.user);
   const [conversation, handler] = useListState<CookMessage>([]);
   const [message, setMessage] = useState<string>("");
   const [isBotThinking, setIsBotThinking] = useState<boolean>(false);
   const { data, isFetching } = useQueryData(["get-conversations"], () =>
     fetchConversation(user?._id as string)
   );
+  const { mutate } = useMutationData(
+    ["create-conversation"],
+    (data: { prompt: string }) => sendMessage(user?._id as string, data.prompt),
+    "get-conversations"
+  );
   const conversationData = (data as CookMessage[]) || [];
   useEffect(() => {
-    if (conversationData) {
+    if (data) {
       handler.setState(conversationData);
       scrollBottom();
     }
-  }, [conversationData]);
+  }, [data, isChatOpen]);
   const chatSectionViewport = useRef<HTMLDivElement>(null);
   const scrollBottom = useCallback(() => {
     if (chatSectionViewport.current) {
@@ -87,6 +98,7 @@ const Chatbot = () => {
     scrollBottom();
     try {
       const data = await sendMessage(user?._id as string, message);
+      mutate({ prompt: message });
       if (data) {
         handler.append({
           role: "ai",
@@ -104,7 +116,7 @@ const Chatbot = () => {
 
   return (
     <div className="fixed bottom-6 right-6">
-      {!isChatOpen ? (
+      {!isChatOpen && user?.plan === UserPlan.PRO ? (
         <button
           className="bg-green-800 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition"
           onClick={() => setIsChatOpen(true)}
@@ -112,61 +124,90 @@ const Chatbot = () => {
           <MessageCircle size={25} />
         </button>
       ) : (
-        <div
-          className={`${
-            isExpanded ? "w-96 h-[500px]" : "w-80 h-96"
-          } bg-white shadow-2xl rounded-xl p-4 flex flex-col transition-all duration-300`}
-        >
-          <div className="flex justify-between items-center border-b pb-2">
-            <h3 className="text-lg font-semibold">Cookwithme Chatbot</h3>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                {isExpanded ? <Minimize size={20} /> : <Maximize size={20} />}
-              </button>
-
-              <button
-                onClick={() => setIsChatOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <Minus size={20} />
-              </button>
-            </div>
-          </div>
-
-          <ScrollArea className="flex-grow">
-            <div className="flex flex-col gap-4 p-4" ref={chatSectionViewport}>
-              {conversation.length === 0 && (
-                <Message
-                  role="ai"
-                  content="Chào bạn, mình là chuyên gia đầu bếp ảo của Cookwithme. Mình có thể giúp gì cho bạn?"
-                />
-              )}
-              {conversation.map((message, index) => (
-                <Message key={index} {...message} />
-              ))}
-              {isBotThinking && <Message role="ai" content="l" />}
-            </div>
-          </ScrollArea>
-          <form className="px-1 pt-3 flex gap-2" onSubmit={handleSendMessage}>
-            <Input
-              placeholder="Nhập tin nhắn"
-              value={message}
-              onChange={handleMessageChange}
-              className="grow"
-              disabled={isBotThinking}
-            />
-            <Button
-              type="submit"
-              size="icon"
-              disabled={isBotThinking || message.trim() === ""}
+        <>
+          {user?.plan === UserPlan.FREE ? (
+            <Modal
+              open={isChatOpen}
+              onOpenChange={setIsChatOpen}
+              className="max-w-sm md:max-w-md rounded-sm"
+              trigger={
+                <button className="bg-green-800 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition">
+                  <MessageCircle size={25} />
+                </button>
+              }
+              title="Pro Plan - 59,000 VND/month"
+              description="Unlock a range of premium features designed to elevate your experience:"
             >
-              <Send className="size-4" />
-            </Button>
-          </form>
-        </div>
+              <PlanDetail />
+            </Modal>
+          ) : (
+            <div
+              className={`${
+                isExpanded ? "w-96 h-[34rem]" : "w-80 h-96"
+              } bg-white shadow-2xl rounded-xl p-3 flex flex-col transition-all duration-300`}
+            >
+              <div className="flex justify-between items-center border-b pb-2">
+                <h3 className="text-lg font-semibold">Cookwithme Chatbot</h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    {isExpanded ? (
+                      <Minimize size={20} />
+                    ) : (
+                      <Maximize size={20} />
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => setIsChatOpen(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <Minus size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <ScrollArea className="flex-grow">
+                <div
+                  className="flex flex-col gap-4 py-3"
+                  ref={chatSectionViewport}
+                >
+                  {conversation.length === 0 && (
+                    <Message
+                      role="ai"
+                      content="Chào bạn, mình là chuyên gia đầu bếp ảo của Cookwithme. Mình có thể giúp gì cho bạn?"
+                    />
+                  )}
+                  {conversation.map((message, index) => (
+                    <Message key={index} {...message} />
+                  ))}
+                  {isBotThinking && <Message role="ai" content="l" />}
+                </div>
+              </ScrollArea>
+              <form
+                className="px-1 pt-3 flex gap-2"
+                onSubmit={handleSendMessage}
+              >
+                <Input
+                  placeholder="Nhập tin nhắn"
+                  value={message}
+                  onChange={handleMessageChange}
+                  className="grow"
+                  disabled={isBotThinking}
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={isBotThinking || message.trim() === ""}
+                >
+                  <Send className="size-4" />
+                </Button>
+              </form>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
