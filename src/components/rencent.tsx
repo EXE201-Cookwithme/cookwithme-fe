@@ -15,7 +15,7 @@ const fetchPostByCategoryName = async (
     const fetchData = await fetch(
       `${process.env.NEXT_PUBLIC_BE}/post/category/${categoryName}`,
       {
-        cache: "force-cache",
+        cache: "no-cache",
       }
     );
     const res = await fetchData.json();
@@ -30,25 +30,24 @@ const Recent = async ({ postId, categoryName }: Props) => {
   const postRelates =
     (await fetchPostByCategoryName(postId, categoryName)) || [];
   return (
-    <div className="p-3 bg-white rounded-sm shadow-md min-h-[16rem] max-h[20rem] ">
-      <p className="pb-3 text-xs md:text-xl lg:text-2xl font-bold text-center">
-        Recent articles
+    <div className="p-3 bg-white rounded-sm shadow-md min-h-[16rem] max-h[20rem]">
+      <p className="pb-2 text-xs md:text-xl lg:text-xl font-bold text-center border-b border-gray-400">
+        Các bài viết liên quan
       </p>
-      <div className="flex flex-col gap-3">
-        <ul className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 pt-4">
+        <ul className="flex flex-col gap-4">
           {postRelates.length > 0 &&
             postRelates.map((post: Post, index: number) => {
               return (
                 <li key={index} className="flex flex-row items-center gap-2">
-                  <BookMarked
-                    size={35}
-                    className="lg:size-30 md:size-25 size-2"
-                  />
                   <Link
                     href={"/home/post/" + post._id}
-                    className=" hover:underline underline-offset-4"
+                    className="flex flex-row "
                   >
-                    <p className="text-sm font-semibold">{post.title}</p>
+                    <span className="text-md font-bold pr-2">{index + 1}.</span>
+                    <p className="text-sm font-semibold hover:underline underline-offset-4">
+                      {post.title}
+                    </p>
                   </Link>
                 </li>
               );

@@ -21,7 +21,7 @@ const fetchPostByCategoryName = async (categoryName: string) => {
     const fetchData = await fetch(
       `${process.env.NEXT_PUBLIC_BE}/post/category/${categoryName}`,
       {
-        cache: "force-cache",
+        cache: "no-cache",
       }
     );
     const res = await fetchData.json();
@@ -53,7 +53,7 @@ const Page = async ({ params: { categoryName } }: Props) => {
               <Card key={index}>
                 <CardHeader>
                   <CardImage
-                    src={p.images[index]}
+                    src={p.images[0]}
                     className="w-[400px] h-[230px] object-cover"
                   ></CardImage>
                 </CardHeader>
