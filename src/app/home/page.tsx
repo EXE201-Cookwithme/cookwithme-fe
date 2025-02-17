@@ -42,7 +42,7 @@ const Page = async () => {
               <Card key={index}>
                 <CardHeader>
                   <CardImage
-                    src={post.images[index]}
+                    src={post.images[0]}
                     className="w-[400px] h-[230px] object-cover"
                   ></CardImage>
                 </CardHeader>

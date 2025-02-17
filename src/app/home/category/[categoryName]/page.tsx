@@ -21,7 +21,7 @@ const fetchPostByCategoryName = async (categoryName: string) => {
     const fetchData = await fetch(
       `${process.env.NEXT_PUBLIC_BE}/post/category/${categoryName}`,
       {
-        cache: "no-cache",
+        cache: "force-cache",
       }
     );
     const res = await fetchData.json();
