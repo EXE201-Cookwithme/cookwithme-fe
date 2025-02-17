@@ -22,7 +22,7 @@ const fetchConversation = async (userId: string) => {
     const handleApi = await fetch(
       `${process.env.NEXT_PUBLIC_BE}/conversation/${userId}`,
       {
-        cache: "force-cache",
+        cache: "no-cache",
       }
     );
     const res = await handleApi.json();
@@ -63,18 +63,13 @@ const Chatbot = ({ user }: Props) => {
   const { data, isFetching } = useQueryData(["get-conversations"], () =>
     fetchConversation(user?._id as string)
   );
-  const { mutate } = useMutationData(
-    ["create-conversation"],
-    (data: { prompt: string }) => sendMessage(user?._id as string, data.prompt),
-    "get-conversations"
-  );
   const conversationData = (data as CookMessage[]) || [];
   useEffect(() => {
     if (data) {
       handler.setState(conversationData);
       scrollBottom();
     }
-  }, [data, isChatOpen]);
+  }, [isChatOpen]);
   const chatSectionViewport = useRef<HTMLDivElement>(null);
   const scrollBottom = useCallback(() => {
     if (chatSectionViewport.current) {
@@ -98,7 +93,6 @@ const Chatbot = ({ user }: Props) => {
     scrollBottom();
     try {
       const data = await sendMessage(user?._id as string, message);
-      mutate({ prompt: message });
       if (data) {
         handler.append({
           role: "ai",
