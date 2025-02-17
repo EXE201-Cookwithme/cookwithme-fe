@@ -4,7 +4,6 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import ReactQueryProvider from "@/react-query";
-import { Analytics } from "@vercel/analytics/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,7 +22,6 @@ export default function RootLayout({
         <body className={inter.className}>
           <ReactQueryProvider>
             {children}
-            <Analytics />
             <Toaster />
           </ReactQueryProvider>
         </body>
