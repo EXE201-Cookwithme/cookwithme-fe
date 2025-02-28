@@ -1,11 +1,12 @@
 import Comment from "@/components/comment";
 import Recent from "@/components/rencent";
 import Image from "next/image";
-
+import { cookies } from "next/headers";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { currentUser, User } from "@clerk/nextjs/server";
 import { formatDate } from "@/lib/utils";
+import { UserBe } from "@/constants/types";
+import { categoryRecord } from "@/constants";
 const postId = "67a80cf63c8c3ff315a8a745";
 const fetchPostById = async () => {
   try {
@@ -28,15 +29,34 @@ const fetchPostById = async () => {
     toast.error("Error fetching post by id");
   }
 };
+const fetchUserByToken = async (token: string) => {
+  try {
+    const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-cache",
+    });
+    const res = await fetchData.json();
+    return res.data;
+  } catch (e) {
+    console.log(e);
+    toast.error("Error fetching user by token");
+  }
+};
 const Page = async () => {
+  const cookieStore = cookies();
+  const token = cookieStore.get("accessToken")?.value || "";
   const post = await fetchPostById();
-  const auth: User | null = await currentUser();
+  const user: UserBe | null = await fetchUserByToken(token);
   return (
     <section className="w-[70%] mx-auto py-8 mt-5">
       <div className="flex flex-col gap-5 p-5 text-center mb-7">
         <h1 className="lg:text-5xl text-3xl font-bold">{post.title}</h1>
         <div className="text-sm font-semibold">
-          <Badge>{post.categoryId.name}</Badge>
+          <Badge>{categoryRecord[post.categoryId.name]}</Badge>
         </div>
         <p className="text-md leading-6 text-gray-700">{post.description}</p>
         <p className="text-sm font-semibold">
@@ -197,7 +217,7 @@ const Page = async () => {
           </div>
 
           <div className="py-7 flex flex-col gap-8">
-            <Comment postId={post._id} clerkId={auth?.id} />
+            <Comment postId={post._id} user={user} />
           </div>
         </div>
 

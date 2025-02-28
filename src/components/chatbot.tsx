@@ -16,7 +16,8 @@ import { set } from "react-hook-form";
 import Modal from "./modal";
 import PlanDetail from "./plan-detail";
 import { useMutationData } from "@/hooks/useMutationData";
-
+import Cookies from "js-cookie";
+import SSO from "./sso";
 const fetchConversation = async (userId: string) => {
   try {
     const handleApi = await fetch(
@@ -55,6 +56,7 @@ type Props = {
   user: UserBe | null;
 };
 const Chatbot = ({ user }: Props) => {
+  const token = Cookies.get("accessToken");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [conversation, handler] = useListState<CookMessage>([]);
@@ -110,7 +112,7 @@ const Chatbot = ({ user }: Props) => {
 
   return (
     <div className="fixed bottom-6 right-6">
-      {!isChatOpen && user?.plan === UserPlan.PRO ? (
+      {!isChatOpen ? (
         <button
           className="bg-green-800 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition"
           onClick={() => setIsChatOpen(true)}
@@ -119,7 +121,7 @@ const Chatbot = ({ user }: Props) => {
         </button>
       ) : (
         <>
-          {user?.plan === UserPlan.FREE ? (
+          {!token ? (
             <Modal
               open={isChatOpen}
               onOpenChange={setIsChatOpen}
@@ -129,77 +131,98 @@ const Chatbot = ({ user }: Props) => {
                   <MessageCircle size={25} />
                 </button>
               }
-              title="Pro Plan - 59,000 VND/month"
-              description="Unlock a range of premium features designed to elevate your experience:"
+              title="Sign in to use chatbot"
+              description="Please log in to access Cookwithme chatbot."
             >
-              <PlanDetail />
+              <SSO />
             </Modal>
           ) : (
-            <div
-              className={`${
-                isExpanded ? "w-96 h-[34rem]" : "w-80 h-96"
-              } bg-white shadow-2xl rounded-xl p-3 flex flex-col transition-all duration-300`}
-            >
-              <div className="flex justify-between items-center border-b pb-2">
-                <h3 className="text-lg font-semibold">Cookwithme Chatbot</h3>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    {isExpanded ? (
-                      <Minimize size={20} />
-                    ) : (
-                      <Maximize size={20} />
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => setIsChatOpen(false)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    <Minus size={20} />
-                  </button>
-                </div>
-              </div>
-
-              <ScrollArea className="flex-grow">
+            <>
+              {user?.plan === UserPlan.FREE ? (
+                <Modal
+                  open={isChatOpen}
+                  onOpenChange={setIsChatOpen}
+                  className="max-w-sm md:max-w-md rounded-sm"
+                  trigger={
+                    <button className="bg-green-800 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition">
+                      <MessageCircle size={25} />
+                    </button>
+                  }
+                  title="Pro Plan - 59,000 VND/month"
+                  description="Unlock a range of premium features designed to elevate your experience:"
+                >
+                  <PlanDetail />
+                </Modal>
+              ) : (
                 <div
-                  className="flex flex-col gap-4 py-3"
-                  ref={chatSectionViewport}
+                  className={`${
+                    isExpanded ? "w-96 h-[34rem]" : "w-80 h-96"
+                  } bg-white shadow-2xl rounded-xl p-3 flex flex-col transition-all duration-300`}
                 >
-                  {conversation.length === 0 && (
-                    <Message
-                      role="ai"
-                      content="Chào bạn, mình là chuyên gia đầu bếp ảo của Cookwithme. Mình có thể giúp gì cho bạn?"
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <h3 className="text-lg font-semibold">
+                      Chuyên gia đầu bếp AI
+                    </h3>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        {isExpanded ? (
+                          <Minimize size={20} />
+                        ) : (
+                          <Maximize size={20} />
+                        )}
+                      </button>
+
+                      <button
+                        onClick={() => setIsChatOpen(false)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <Minus size={20} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <ScrollArea className="flex-grow">
+                    <div
+                      className="flex flex-col gap-4 py-3"
+                      ref={chatSectionViewport}
+                    >
+                      {conversation.length === 0 && (
+                        <Message
+                          role="ai"
+                          content="Chào bạn, mình là chuyên gia đầu bếp ảo của Cookwithme. Mình có thể giúp gì cho bạn?"
+                        />
+                      )}
+                      {conversation.map((message, index) => (
+                        <Message key={index} {...message} />
+                      ))}
+                      {isBotThinking && <Message role="ai" content="l" />}
+                    </div>
+                  </ScrollArea>
+                  <form
+                    className="px-1 pt-3 flex gap-2"
+                    onSubmit={handleSendMessage}
+                  >
+                    <Input
+                      placeholder="Nhập tin nhắn"
+                      value={message}
+                      onChange={handleMessageChange}
+                      className="grow"
+                      disabled={isBotThinking}
                     />
-                  )}
-                  {conversation.map((message, index) => (
-                    <Message key={index} {...message} />
-                  ))}
-                  {isBotThinking && <Message role="ai" content="l" />}
+                    <Button
+                      type="submit"
+                      size="icon"
+                      disabled={isBotThinking || message.trim() === ""}
+                    >
+                      <Send className="size-4" />
+                    </Button>
+                  </form>
                 </div>
-              </ScrollArea>
-              <form
-                className="px-1 pt-3 flex gap-2"
-                onSubmit={handleSendMessage}
-              >
-                <Input
-                  placeholder="Nhập tin nhắn"
-                  value={message}
-                  onChange={handleMessageChange}
-                  className="grow"
-                  disabled={isBotThinking}
-                />
-                <Button
-                  type="submit"
-                  size="icon"
-                  disabled={isBotThinking || message.trim() === ""}
-                >
-                  <Send className="size-4" />
-                </Button>
-              </form>
-            </div>
+              )}
+            </>
           )}
         </>
       )}

@@ -3,7 +3,9 @@ import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-
+type Props = {
+  type: "pro" | "premium";
+};
 const createLinkPayment = async () => {
   await new Promise((resolve) => setTimeout(resolve, 2000)); // Giả lập thời gian tải
   try {
@@ -23,11 +25,35 @@ const createLinkPayment = async () => {
   }
 };
 
-const PlanDetail = () => {
+const createLinkPaymentTietKiem = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // Giả lập thời gian tải
+  try {
+    const handleData = await fetch(
+      `${process.env.NEXT_PUBLIC_BE}/payment/create-payment-link-tiet-kiem`,
+      {
+        cache: "no-cache",
+      }
+    );
+    const res = await handleData.json();
+    console.log("Link URL:", res.checkoutUrl);
+    return res.checkoutUrl;
+  } catch (e) {
+    console.log(e);
+    toast.error("Error creating link payment");
+    return null;
+  }
+};
+
+const PlanDetail = ({ type }: Props) => {
   const [loading, setLoading] = useState(false);
-  const handleRegister = async () => {
+  const handleRegister = async (type: "pro" | "premium") => {
     setLoading(true);
-    const checkoutUrl = await createLinkPayment();
+    let checkoutUrl = "";
+    if (type === "pro") {
+      checkoutUrl = await createLinkPayment();
+    } else if (type === "premium") {
+      checkoutUrl = await createLinkPaymentTietKiem();
+    }
     setLoading(false);
     if (checkoutUrl) {
       window.location.href = checkoutUrl;
@@ -43,8 +69,9 @@ const PlanDetail = () => {
             color="green"
           />
           <p className="col-span-11 flex-wrap">
-            <strong>Unlimited Ads Links:</strong> Create and manage an unlimited
-            number of advertising links without any restrictions.
+            <strong>Liên kết quảng cáo không giới hạn:</strong> Tạo và quản lý
+            số lượng liên kết quảng cáo không giới hạn mà không có bất kỳ hạn
+            chế nào.
           </p>
         </li>
         <li className="grid grid-cols-12">
@@ -53,9 +80,9 @@ const PlanDetail = () => {
             color="green"
           />
           <p className="col-span-11 flex-wrap">
-            <strong>Advanced AI Generation:</strong> Access powerful AI tools
-            for content creation and automated processes to enhance your
-            workflow.
+            <strong>Thế hệ AI tiên tiến:</strong> Truy cập các công cụ AI mạnh
+            mẽ để tạo nội dung và các quy trình tự động nhằm nâng cao quy trình
+            làm việc của bạn.
           </p>
         </li>
         <li className="grid grid-cols-12">
@@ -64,19 +91,22 @@ const PlanDetail = () => {
             color="green"
           />
           <p className="col-span-11 flex-wrap">
-            <strong>Unlimited Slots for Online Workshops:</strong> Host an
-            unlimited number of participants in your online workshops, ensuring
-            smooth and efficient sessions for all attendees.
+            <strong>
+              Số lượng chỗ ngồi không giới hạn cho các buổi hội thảo trực tuyến:
+            </strong>{" "}
+            Tổ chức số lượng người tham gia không giới hạn vào hội thảo trực
+            tuyến của bạn, đảm bảo các buổi họp diễn ra suôn sẻ và hiệu quả cho
+            tất cả người tham dự.
           </p>
         </li>
       </ul>
       <div className="z-10 flex items-center justify-center">
         <Button
           className="px-2 py-2 bg-green-700 text-white hover:bg-green-800"
-          onClick={handleRegister}
+          onClick={() => handleRegister(type)}
           disabled={loading}
         >
-          {loading ? "Loading..." : "Register Now"}
+          {loading ? "Đang tải..." : "Đăng ký ngay"}
         </Button>
       </div>
     </>

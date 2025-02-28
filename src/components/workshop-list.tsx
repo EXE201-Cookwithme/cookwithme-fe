@@ -4,9 +4,9 @@ import { Workshop } from "./workshop-card";
 const workshops = [
   {
     id: 1,
-    title: "Cooking Basics",
+    title: "Những điều cơ bản về nấu ăn",
     description:
-      "Learn fundamental cooking techniques and how to prepare ingredients properly.",
+      "Học các kỹ thuật nấu ăn cơ bản và cách chuẩn bị nguyên liệu đúng cách.",
     startTime: "2023-06-15T10:00:00",
     endTime: "2023-06-15T12:00:00",
     author: "Jane Doe",
@@ -14,9 +14,9 @@ const workshops = [
   },
   {
     id: 2,
-    title: "Advanced Cooking Techniques",
+    title: "Kỹ thuật nấu ăn nâng cao",
     description:
-      "Explore advanced cooking techniques to elevate your culinary skills.",
+      "Khám phá các kỹ thuật nấu ăn nâng cao để nâng cao kỹ năng ẩm thực của bạn.",
     startTime: "2023-06-16T14:00:00",
     endTime: "2023-06-16T16:00:00",
     author: "John Smith",
@@ -24,9 +24,9 @@ const workshops = [
   },
   {
     id: 3,
-    title: "Food Presentation & Plating",
+    title: "Trình bày & trang trí món ăn",
     description:
-      "Discover the art of food presentation to make your dishes visually appealing.",
+      "Tìm hiểu nghệ thuật trình bày món ăn để làm cho món ăn của bạn trở nên hấp dẫn hơn.",
     startTime: "2023-06-17T11:00:00",
     endTime: "2023-06-17T13:00:00",
     author: "Emily Johnson",
@@ -37,7 +37,7 @@ const workshops = [
 export function WorkshopList() {
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Upcoming Workshops</h1>
+      <h1 className="text-2xl font-bold mb-6">Workshops sắp tới</h1>
       <div className="space-y-4">
         {workshops.map((workshop) => (
           <Workshop key={workshop.id} {...workshop} />

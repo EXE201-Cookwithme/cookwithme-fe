@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Rabbit } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Post } from "@/constants/types";
+import { categoryRecord } from "@/constants";
 type Props = {
   params: {
     categoryName: string;
@@ -44,7 +45,7 @@ const Page = async ({ params: { categoryName } }: Props) => {
   return (
     <section className="mx-auto w-[80%] py-8">
       <div className="text-3xl font-bold p-5">
-        Category: {categoryName.split("-").join(" ")}
+        Loại: {categoryRecord[categoryName]}
       </div>
       <div className="grid grid-cols-3 gap-6">
         {posts.length > 0 &&
@@ -58,7 +59,9 @@ const Page = async ({ params: { categoryName } }: Props) => {
                   ></CardImage>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm font-medium">{p.categoryId.name}</p>
+                  <p className="text-sm font-medium">
+                    {categoryRecord[p.categoryId.name]}
+                  </p>
                   <p className="text-xl font-bold">{p.title}</p>
                   <p className="text-xs text-gray-500 truncate">
                     {p.description}
@@ -71,7 +74,7 @@ const Page = async ({ params: { categoryName } }: Props) => {
                 </CardContent>
                 <CardFooter>
                   <Link href={`/home/post/${p._id}`}>
-                    <Button variant={"outline"}>Read more</Button>
+                    <Button variant={"outline"}>Xem chi tiết</Button>
                   </Link>
                 </CardFooter>
               </Card>
@@ -81,7 +84,9 @@ const Page = async ({ params: { categoryName } }: Props) => {
       {posts.length === 0 && (
         <div className="flex flex-col gap-4 items-center justify-center min-h-[16rem]">
           <Rabbit className="animate-bounce lg:size-38 md:size-20 size-10" />
-          <p className="text-xl italic text-center">No posts ...</p>
+          <p className="text-xl italic text-center">
+            Hiện tại không có bài viết ...
+          </p>
         </div>
       )}
     </section>

@@ -12,8 +12,8 @@ export const Footer = () => {
               <h2 className="font-bold text-xl">Cookwithme</h2>
             </div>
             <div className="text-gray-400 mt-4 text-sm w-[40%] text-justify">
-              Discover 1000+ recipes in your hand with the best recipe. Help you
-              to find the easiest to cook.
+              Khám phá hơn 1000 công thức nấu ăn trong tay bạn với công thức nấu
+              ăn tuyệt vời nhất. Giúp bạn tìm ra công thức nấu ăn dễ nhất.
             </div>
           </div>
           <div className="w-[40%]">
@@ -28,7 +28,7 @@ export const Footer = () => {
                       href="#about"
                       className="text-slate-400 hover:text-white"
                     >
-                      About
+                      Chi tiết
                     </Link>
                   </li>
                   <li>
@@ -36,7 +36,7 @@ export const Footer = () => {
                       href="#features"
                       className="text-slate-400  hover:text-white"
                     >
-                      Features
+                      Chức năng
                     </Link>
                   </li>
                   <li>
@@ -44,7 +44,7 @@ export const Footer = () => {
                       href="#recipes"
                       className="text-slate-400  hover:text-white"
                     >
-                      Recipes
+                      Công thức
                     </Link>
                   </li>
                   <li>
@@ -52,7 +52,7 @@ export const Footer = () => {
                       href="#pricing"
                       className="text-slate-400  hover:text-white tracking-wide"
                     >
-                      Pricing Plans
+                      Gói dịch vụ
                     </Link>
                   </li>
                 </ul>

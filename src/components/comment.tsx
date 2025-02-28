@@ -3,18 +3,18 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useQueryData } from "@/hooks/useQueryData";
 import { toast } from "sonner";
-import { UserPlan, UserRole } from "@/constants";
 import Image from "next/image";
-
-import { useState } from "react";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { useMutationData } from "@/hooks/useMutationData";
 import Loader from "./loader";
 import { formatDate } from "@/lib/utils";
 import { CommentPost, UserBe } from "@/constants/types";
+import SSO from "./sso";
 
 type Props = {
   postId: string;
-  clerkId: string | undefined;
+  user: UserBe | null;
 };
 const fetchComments = async (postId: string) => {
   try {
@@ -58,26 +58,15 @@ const createComment = async (
     toast.error("Error create comments");
   }
 };
-const fetchUserByClerkId = async (clerkId: string) => {
-  try {
-    const fetchData = await fetch(
-      `${process.env.NEXT_PUBLIC_BE}/user/${clerkId}`
-    );
-    const res = await fetchData.json();
-    return res.data;
-  } catch (e) {
-    console.log(e);
-    toast.error("Error fetching user by clerk id");
-  }
-};
-const Comment = ({ postId, clerkId }: Props) => {
+const Comment = ({ postId, user }: Props) => {
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    setToken(Cookies.get("accessToken") || "");
+  }, []);
   const { data } = useQueryData(["get-comments"], () => fetchComments(postId));
   const comments = (data as CommentPost[]) || [];
   const [commentText, setCommentText] = useState("");
-  const { data: dataUser } = useQueryData(["get-user"], () =>
-    fetchUserByClerkId(clerkId as string)
-  );
-  const user = (dataUser as UserBe) || {};
   const { mutate, isPending } = useMutationData(
     ["create-comment"],
     (data: { userId: string; postId: string; content: string }) =>
@@ -91,7 +80,7 @@ const Comment = ({ postId, clerkId }: Props) => {
       return;
     }
     mutate(
-      { userId: user._id, postId, content: commentText },
+      { userId: user?._id, postId, content: commentText },
       {
         onSuccess: () => {
           toast.success("Comment added successfully!");
@@ -101,16 +90,16 @@ const Comment = ({ postId, clerkId }: Props) => {
     );
   };
   return (
-    <>
+    <div>
       <div className="text-2xl font-semibold">
-        {comments.length ?? 0} thoughts on this post
+        {comments.length ?? 0} bình luận
       </div>
       {comments.length > 0
         ? comments.map((comment, index) => {
             return (
               <div
                 key={index}
-                className="grid grid-cols-12 border border-black border-opacity-10 rounded-md"
+                className="grid grid-cols-12 my-4 border-2 border-black border-opacity-10 rounded-md"
               >
                 <div className="col-span-10">
                   <div className="bg-white rounded-sm p-6">
@@ -142,22 +131,34 @@ const Comment = ({ postId, clerkId }: Props) => {
             );
           })
         : "No comments"}
-      <form
-        onSubmit={handleSubmit}
-        className="w-[87%] flex lg:flex-row gap-2 p-5 bg-white rounded-sm xs:flex-wrap"
-      >
-        <Input
-          className="outline-none"
-          placeholder="Add a comment"
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-          disabled={isPending}
-        />
-        <Button type="submit">
-          <Loader state={isPending}>Submit</Loader>
-        </Button>
-      </form>
-    </>
+
+      {!token ? (
+        <div className="grid grid-rows-2 gap-3">
+          <div className="col-span-1 font-bold md:text-xl text-md">
+            Đăng nhập để bình luận:
+          </div>
+          <div className="col-span-1 w-[90%] flex justify-center">
+            <SSO />
+          </div>
+        </div>
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="w-[87%] flex lg:flex-row gap-2 p-5 bg-white rounded-sm xs:flex-wrap"
+        >
+          <Input
+            className="outline-none"
+            placeholder="Hãy tương tác với bài viết nào..."
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            disabled={isPending}
+          />
+          <Button type="submit">
+            <Loader state={isPending}>Gửi</Loader>
+          </Button>
+        </form>
+      )}
+    </div>
   );
 };
 

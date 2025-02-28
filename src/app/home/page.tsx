@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardImage,
 } from "@/components/ui/card";
+import { categoryRecord } from "@/constants";
 import { Post } from "@/constants/types";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
@@ -35,7 +36,7 @@ const Page = async () => {
   return (
     <main className="flex-1">
       <section className="mx-auto w-[80%] py-8">
-        <div className="text-3xl font-bold p-5">Recent articles</div>
+        <div className="text-3xl font-bold p-5">Các bài viết gần đây</div>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
           {posts.map((post, index) => {
             return (
@@ -47,7 +48,9 @@ const Page = async () => {
                   ></CardImage>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm font-medium">{post.categoryId.name}</p>
+                  <p className="text-sm font-medium">
+                    {categoryRecord[post.categoryId.name]}
+                  </p>
                   <p className="text-xl font-bold">{post.title}</p>
                   <p className="text-xs text-gray-500 truncate">
                     {post.description}
@@ -60,7 +63,7 @@ const Page = async () => {
                 </CardContent>
                 <CardFooter>
                   <Link href={`home/post/${post._id}`}>
-                    <Button variant={"outline"}>Read more</Button>
+                    <Button variant={"outline"}>Xem chi tiết</Button>
                   </Link>
                 </CardFooter>
               </Card>

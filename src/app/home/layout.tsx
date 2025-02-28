@@ -3,7 +3,8 @@ import { Footer } from "@/components/footer";
 import Header from "@/components/header";
 import { Category, UserBe } from "@/constants/types";
 import UserProvider from "@/providers/UserProvider";
-import { currentUser, User } from "@clerk/nextjs/server";
+import Cookies from "js-cookie";
+import { cookies } from "next/headers";
 import React from "react";
 import { toast } from "sonner";
 
@@ -20,32 +21,31 @@ const fetchCategories = async () => {
     toast.error("Error fetching categories");
   }
 };
-
-const fetchUserByClerkId = async (clerkId: string) => {
+const fetchUserByToken = async (token: string) => {
   try {
-    const fetchData = await fetch(
-      `${process.env.NEXT_PUBLIC_BE}/user/${clerkId}`
-    );
+    const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const res = await fetchData.json();
     return res.data;
   } catch (e) {
     console.log(e);
-    toast.error("Error fetching user by clerk id");
+    toast.error("Error fetching user by token");
   }
 };
+
 const Layout = async ({ children }: Props) => {
   const categories: Category[] = await fetchCategories();
-  const auth: User | null = await currentUser();
-  const user: UserBe = await fetchUserByClerkId(auth?.id as string);
   return (
-    <UserProvider user={user}>
-      <div className="flex flex-col min-h-screen bg-green-100 relative">
-        <Header categories={categories} />
-        {children}
-        <Footer />
-        <Chatbot user={user} />
-      </div>
-    </UserProvider>
+    <div className="flex flex-col min-h-screen bg-green-100 relative">
+      <Header categories={categories} />
+      {children}
+      <Footer />
+    </div>
   );
 };
 export default Layout;

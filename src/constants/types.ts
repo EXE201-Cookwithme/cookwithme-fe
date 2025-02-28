@@ -26,7 +26,6 @@ export interface UserBe {
   firstname: string;
   lastname: string;
   image: string;
-  clerkid: string;
   createdAt: Date;
 }
 export interface CommentPost {
