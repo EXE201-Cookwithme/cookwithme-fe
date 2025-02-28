@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +17,7 @@ export const runtime = "nodejs";
 const fetchAllPost = async () => {
   try {
     const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/post`, {
-      cache: "force-cache",
+      cache: "no-cache",
     });
     const res = await fetchData.json();
     return res.data.map((post: Post) => ({
@@ -48,9 +49,11 @@ const Page = async () => {
                   ></CardImage>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm font-medium">
-                    {categoryRecord[post.categoryId.name]}
-                  </p>
+                  <Badge variant="destructive">
+                    <p className="text-xs font-medium">
+                      {categoryRecord[post.categoryName]}
+                    </p>
+                  </Badge>
                   <p className="text-xl font-bold">{post.title}</p>
                   <p className="text-xs text-gray-500 truncate">
                     {post.description}

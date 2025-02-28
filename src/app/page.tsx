@@ -1,5 +1,6 @@
 import HeaderSlider from "@/components/header-slider";
 import ServicePackage from "@/components/servicePackage";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardImage } from "@/components/ui/card";
 import {
@@ -21,7 +22,7 @@ import { toast } from "sonner";
 const fetchAllPost = async () => {
   try {
     const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/post`, {
-      cache: "force-cache",
+      cache: "no-cache",
     });
     const res = await fetchData.json();
     return res.data.map((post: Post) => ({
@@ -175,18 +176,22 @@ const Page = async () => {
                       className="lg:basis-1/3 md:basis-1/2 basis"
                     >
                       <Link href={`/home/post/${post._id}`}>
-                        <Card className="h-[400px] rounded-xl">
-                          <CardHeader>
+                        <Card className="h-[400px] rounded-xl grid grid-rows-1">
+                          <CardHeader className="grid-rows-6 ">
                             <CardImage
                               src={post.images[0]}
-                              className="max-w-[450px] max-h-[200px] object-cover transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+                              className="max-w-[450px] min-h-[200px] object-cover transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
                             ></CardImage>
                           </CardHeader>
-                          <CardContent>
-                            <p className="text-sm font-medium">
-                              {categoryRecord[post.categoryName]}
+                          <CardContent className="grid-rows-6">
+                            <Badge variant="destructive">
+                              <p className="text-xs font-medium">
+                                {categoryRecord[post.categoryName]}
+                              </p>
+                            </Badge>
+                            <p className="text-sm font-bold py-1">
+                              {post.title}
                             </p>
-                            <p className="text-md font-bold">{post.title}</p>
                             <p className="text-xs text-gray-500 line-clamp-4">
                               {post.description}
                             </p>

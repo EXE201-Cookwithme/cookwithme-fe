@@ -12,6 +12,7 @@ import { Rabbit } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Post } from "@/constants/types";
 import { categoryRecord } from "@/constants";
+import { Badge } from "@/components/ui/badge";
 type Props = {
   params: {
     categoryName: string;
@@ -22,7 +23,7 @@ const fetchPostByCategoryName = async (categoryName: string) => {
     const fetchData = await fetch(
       `${process.env.NEXT_PUBLIC_BE}/post/category/${categoryName}`,
       {
-        cache: "force-cache",
+        cache: "no-cache",
       }
     );
     const res = await fetchData.json();
@@ -59,9 +60,11 @@ const Page = async ({ params: { categoryName } }: Props) => {
                   ></CardImage>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm font-medium">
-                    {categoryRecord[p.categoryId.name]}
-                  </p>
+                  <Badge variant="destructive">
+                    <p className="text-xs font-medium">
+                      {categoryRecord[p.categoryId.name]}
+                    </p>
+                  </Badge>
                   <p className="text-xl font-bold">{p.title}</p>
                   <p className="text-xs text-gray-500 truncate">
                     {p.description}
