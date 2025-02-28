@@ -6,7 +6,7 @@ const workshops = [
     id: 1,
     title: "Những điều cơ bản về nấu ăn",
     description:
-      "Học các kỹ thuật nấu ăn cơ bản và cách chuẩn bị nguyên liệu đúng cách.",
+      "Học các kỹ thuật nấu ăn cơ bản và cách chuẩn bị nguyên liệu đúng cách",
     startTime: "2023-06-15T10:00:00",
     endTime: "2023-06-15T12:00:00",
     author: "Jane Doe",
