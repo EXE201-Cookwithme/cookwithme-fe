@@ -62,7 +62,7 @@ const Chatbot = ({ user }: Props) => {
   const [conversation, handler] = useListState<CookMessage>([]);
   const [message, setMessage] = useState<string>("");
   const [isBotThinking, setIsBotThinking] = useState<boolean>(false);
-  const { data, isFetching } = useQueryData(["get-conversations"], () =>
+  const { data, refetch } = useQueryData(["get-conversations"], () =>
     fetchConversation(user?._id as string)
   );
   const conversationData = (data as CookMessage[]) || [];
@@ -107,6 +107,7 @@ const Chatbot = ({ user }: Props) => {
     } finally {
       setIsBotThinking(false);
       scrollBottom();
+      refetch();
     }
   };
 
@@ -131,8 +132,8 @@ const Chatbot = ({ user }: Props) => {
                   <MessageCircle size={25} />
                 </button>
               }
-              title="Sign in to use chatbot"
-              description="Please log in to access Cookwithme chatbot."
+              title="Đăng nhập để sử dụng chatbot"
+              description="Vui lòng đăng nhập để truy cập chatbot Cookwithme."
             >
               <SSO />
             </Modal>
@@ -148,10 +149,10 @@ const Chatbot = ({ user }: Props) => {
                       <MessageCircle size={25} />
                     </button>
                   }
-                  title="Pro Plan - 59,000 VND/month"
-                  description="Unlock a range of premium features designed to elevate your experience:"
+                  title="Gói Pro - 59,000 VND/tháng"
+                  description="Mở khóa một loạt các tính năng cao cấp được thiết kế để nâng cao trải nghiệm của bạn:"
                 >
-                  <PlanDetail />
+                  <PlanDetail type="pro" />
                 </Modal>
               ) : (
                 <div

@@ -1,13 +1,14 @@
 import Comment from "@/components/comment";
 import Recent from "@/components/rencent";
 import Image from "next/image";
-import { cookies } from "next/headers";
+
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
+import { cookies } from "next/headers";
 import { UserBe } from "@/constants/types";
 import { categoryRecord } from "@/constants";
-const postId = "67a80cf63c8c3ff315a8a745";
+const postId = "67a811213c8c3ff315a8a746";
 const fetchPostById = async () => {
   try {
     const fetchData = await fetch(
@@ -74,33 +75,39 @@ const Page = async () => {
           />
           <div className="flex flex-col font-serif text-gray-700 leading-relaxed gap-5">
             <p>
-              <strong>Fried Zucchini in Agrodolce with Chilies and Mint</strong>
+              <strong>Beer Pizza Crust Dough</strong>
               <br />
-              Several oven-dried (sun-dried) zucchini slices
+              1 cup (8 oz) beer at room temperature or warmer (under 100 degrees
+              F)
               <br />
-              Agrodolce sauce (recipe below)
+              1½ teaspoons active dry yeast
               <br />
-              Olive oil
-              <br />
-              Several fresh mint leaves, gently torn
+              3 tablespoons olive oil
+              <br />1 tablespoon sugar
+              <br />1 teaspoon salt
+              <br />2 cups all-purpose flour
+              <br />1 cup bread flour
             </p>
 
             <p>
-              Generously coat the bottom of a saute pan with olive oil and heat
-              until shimmering. Add zucchini, being careful not to crowd the pan
-              (you may have to work in batches), and lightly brown each side. It
-              will brown quickly, so keep checking and flipping the pieces until
-              both sides are golden and blistered.
+              Mix yeast and warm beer in a medium bowl until well combined. Add
+              olive oil, sugar and salt and mix well. Add all flour and stir
+              with a dough whisk, if you have one, or with your hands until the
+              dough forms a shaggy ball. Knead dough (see the method in the Step
+              by Step Details section) until smooth and elastic (may take up to
+              10 minutes).
             </p>
             <p>
-              Transfer cooked zucchini to a serving bowl but do not shake off
-              too much of the oil: the finished dish will taste better with some
-              oil.
+              Place kneaded dough ball in a large bowl and cover the bowl with
+              plastic wrap. Place in a warm place to proof until doubled in size
+              (approximately 1 hour, but it can be left for several hours or
+              even overnight).
             </p>
             <p>
-              Sprinkle mint leaves over the zucchini. Spoon hot agrodolce over
-              the zucchini and mint and let it sit for a minute or two to soak
-              up the flavors.
+              When doubled in size, punch the dough or slam the bowl to collapse
+              it. Pour the dough out onto a floured surface and divide into 4
+              pieces. Roll each piece into a ball (see the method in the Step by
+              Step Details section).
             </p>
 
             <div>
@@ -196,6 +203,39 @@ const Page = async () => {
             <p className="flex justify-center items-center">
               <Image
                 src={post.images[6]}
+                alt="Limoncello"
+                width={450}
+                height={450}
+              />
+            </p>
+            <p>
+              To make the pizza making process easier – and to store pizza
+              crusts for later use – I like to pre-bake my pizza crusts just
+              enough to firm them up a bit. Do this in an oven (anywhere from
+              375 to 425 F) or on a hot grill.
+            </p>
+            <p>
+              Note: If using a grill, do not use direct heat under the crust, as
+              it can easily scorch very quickly. Heat the grill using the
+              outside burners and place the rolled-out dough on the grill over
+              the unheated middle burners.
+            </p>
+            <p className="flex justify-center items-center">
+              <Image
+                src={post.images[8]}
+                alt="Limoncello"
+                width={450}
+                height={450}
+              />
+            </p>
+            <p>
+              When you top the pizza, the sauce and toppings will go on this
+              smoother, browned side: the “uncooked” side will cook when you
+              bake the pizza.
+            </p>
+            <p className="flex justify-center items-center">
+              <Image
+                src={post.images[11]}
                 alt="Limoncello"
                 width={450}
                 height={450}

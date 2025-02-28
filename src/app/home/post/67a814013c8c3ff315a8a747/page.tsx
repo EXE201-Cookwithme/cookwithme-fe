@@ -1,13 +1,14 @@
 import Comment from "@/components/comment";
 import Recent from "@/components/rencent";
 import Image from "next/image";
-import { cookies } from "next/headers";
+
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
+import { cookies } from "next/headers";
 import { UserBe } from "@/constants/types";
 import { categoryRecord } from "@/constants";
-const postId = "67a80cf63c8c3ff315a8a745";
+const postId = "67a814013c8c3ff315a8a747";
 const fetchPostById = async () => {
   try {
     const fetchData = await fetch(
@@ -55,7 +56,7 @@ const Page = async () => {
       <div className="flex flex-col gap-5 p-5 text-center mb-7">
         <h1 className="lg:text-5xl text-3xl font-bold">{post.title}</h1>
         <div className="text-sm font-semibold">
-          <Badge>{categoryRecord[post.categoryId.name]}</Badge>
+           <Badge>{categoryRecord[post.categoryId.name]}</Badge>
         </div>
         <p className="text-md leading-6 text-gray-700">{post.description}</p>
         <p className="text-sm font-semibold">
@@ -74,35 +75,45 @@ const Page = async () => {
           />
           <div className="flex flex-col font-serif text-gray-700 leading-relaxed gap-5">
             <p>
-              <strong>Fried Zucchini in Agrodolce with Chilies and Mint</strong>
+              <strong>Dark Roast Chocolate Cookies</strong>
               <br />
-              Several oven-dried (sun-dried) zucchini slices
+              1½ sticks salted butter, softened (¾ cup, or 6 oz)
               <br />
-              Agrodolce sauce (recipe below)
+              1 cup dark brown sugar, packed
               <br />
-              Olive oil
-              <br />
-              Several fresh mint leaves, gently torn
+              ½ cup granulated (white) sugar
+              <br />1 large egg
+              <br />1 teaspoon salt
+              <br />1 teaspoon vanilla extract
+              <br />3 Tablespoons brewed coffee (dark roast is best)
             </p>
 
             <p>
-              Generously coat the bottom of a saute pan with olive oil and heat
-              until shimmering. Add zucchini, being careful not to crowd the pan
-              (you may have to work in batches), and lightly brown each side. It
-              will brown quickly, so keep checking and flipping the pieces until
-              both sides are golden and blistered.
+              Heat oven to 350 degrees F and line three baking sheets with
+              parchment paper or silicone baking mats.
             </p>
             <p>
-              Transfer cooked zucchini to a serving bowl but do not shake off
-              too much of the oil: the finished dish will taste better with some
-              oil.
+              In a large bowl, beat the butter, brown sugar, granulated sugar,
+              egg, vanilla and coffee until creamy and free of lumps. In a
+              separate bowl whisk together the flour, cocoa powder, instant
+              coffee, baking soda and salt.
             </p>
             <p>
-              Sprinkle mint leaves over the zucchini. Spoon hot agrodolce over
-              the zucchini and mint and let it sit for a minute or two to soak
-              up the flavors.
+              Gradually add the flour mixture to the butter mixture and beat on
+              medium speed until just combined. Stir in the chocolate chips.
             </p>
-
+            <p>
+              Form 1 or 1½-inch balls of dough (or use a 1 or 1½ Tablespoon
+              cookie scoop). Place the balls of dough about 2 inches apart on
+              the lined baking sheets. Press each ball gently with a fork and
+              sprinkle the top with turbinado sugar.
+            </p>
+            <p>
+              Bake at 350 degrees F for 9 to 11 minutes, or until the centers of
+              the cookies are cooked through and the edges are beginning to
+              crisp up. Remove from the oven and cool the cookies on a wire
+              rack.
+            </p>
             <div>
               <strong>Agrodolce</strong>
               <ul>
@@ -196,6 +207,26 @@ const Page = async () => {
             <p className="flex justify-center items-center">
               <Image
                 src={post.images[6]}
+                alt="Limoncello"
+                width={450}
+                height={450}
+              />
+            </p>
+            <p>
+              To make the pizza making process easier – and to store pizza
+              crusts for later use – I like to pre-bake my pizza crusts just
+              enough to firm them up a bit. Do this in an oven (anywhere from
+              375 to 425 F) or on a hot grill.
+            </p>
+            <p>
+              Note: If using a grill, do not use direct heat under the crust, as
+              it can easily scorch very quickly. Heat the grill using the
+              outside burners and place the rolled-out dough on the grill over
+              the unheated middle burners.
+            </p>
+            <p className="flex justify-center items-center">
+              <Image
+                src={post.images[8]}
                 alt="Limoncello"
                 width={450}
                 height={450}

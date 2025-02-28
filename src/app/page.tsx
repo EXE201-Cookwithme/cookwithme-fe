@@ -1,19 +1,7 @@
-"use client";
-import Header from "@/components/header";
 import HeaderSlider from "@/components/header-slider";
-import Modal from "@/components/modal";
-import PlanDetail from "@/components/plan-detail";
 import ServicePackage from "@/components/servicePackage";
-import SSO from "@/components/sso";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardImage,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardImage } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -21,23 +9,35 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { UserPlan } from "@/constants";
-import {
-  BadgePlus,
-  Book,
-  Boxes,
-  Brain,
-  ChefHat,
-  MonitorPlay,
-  Share2,
-  Sparkles,
-} from "lucide-react";
+import { categoryRecord } from "@/constants";
+import { Post } from "@/constants/types";
+import { Book, Boxes, Brain, ChefHat, MonitorPlay, Share2 } from "lucide-react";
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
+import { toast } from "sonner";
 
-const Page = () => {
+const fetchAllPost = async () => {
+  try {
+    const fetchData = await fetch(`${process.env.NEXT_PUBLIC_BE}/post`, {
+      cache: "force-cache",
+    });
+    const res = await fetchData.json();
+    return res.data.map((post: Post) => ({
+      ...post,
+      images: post.images.map(
+        (img) => `${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/${img}`
+      ),
+    }));
+  } catch (e) {
+    console.log(e);
+    toast.error("Error fetching posts");
+  }
+};
+const Page = async () => {
+  const posts: Post[] = await fetchAllPost();
+
   const imageSlider = {
     1: `${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/f1.png`,
     3: `${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/f3.png`,
@@ -169,227 +169,43 @@ const Page = () => {
             <div className="flex justify-center">
               <Carousel className="w-[60%] ">
                 <CarouselContent>
-                  <CarouselItem className="basis-1/3">
-                    <Card>
-                      <CardHeader>
-                        <CardImage
-                          src="/r1.jpg"
-                          className="w-[450px] object-cover"
-                        ></CardImage>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm font-medium">Desserts</p>
-                        <p className="text-xl font-bold">
-                          Decadent Cake Recipe
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Indulge in this rich and moist chocolate cake.
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <div className="grid grid-cols-12 gap-2">
-                          <div className="col-span-2">
-                            <Avatar>
-                              <AvatarImage
-                                className="w-9 h-9 rounded-full"
-                                src="https://github.com/shadcn.png"
-                              />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="col-span-10">
-                            <div className="flex flex-col gap-1">
-                              <p className="font-medium text-xs text-black">
-                                Van Thu
-                              </p>
-                              <p className="text-xs">
-                                <span>10 Jan 2023</span>
-                                <span>2 min read</span>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </CarouselItem>
-                  <CarouselItem className="basis-1/3 ">
-                    <Card>
-                      <CardHeader>
-                        <CardImage
-                          src="/r2.jpg"
-                          className="w-[450px] object-cover"
-                        ></CardImage>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm font-medium">Cooking</p>
-                        <p className="text-xl font-bold">
-                          5 Quick Breakfast Ideas
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Start your day right with these easy breakfast recipes
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <div className="grid grid-cols-12 gap-2">
-                          <div className="col-span-2">
-                            <Avatar>
-                              <AvatarImage
-                                className="w-9 h-9 rounded-full"
-                                src="https://github.com/shadcn.png"
-                              />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="col-span-10">
-                            <div className="flex flex-col gap-1">
-                              <p className="font-medium text-xs text-black">
-                                Hong Ngoc
-                              </p>
-                              <p className="text-xs">
-                                <span>11 Jan 2023</span>
-                                <span>5 min read</span>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </CarouselItem>
-                  <CarouselItem className="basis-1/3">
-                    <Card>
-                      <CardHeader>
-                        <CardImage
-                          src="/r3.jpg"
-                          className="w-[450px] object-cover"
-                        ></CardImage>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm font-medium">Healthy</p>
-                        <p className="text-xl font-bold">Easy Veggie Recipe</p>
-                        <p className="text-xs text-gray-500">
-                          A quick and nutritious meal packed with flavor.
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <div className="grid grid-cols-12 gap-2">
-                          <div className="col-span-2">
-                            <Avatar>
-                              <AvatarImage
-                                className="w-9 h-9 rounded-full"
-                                src="https://github.com/shadcn.png"
-                              />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="col-span-10">
-                            <div className="flex flex-col gap-1">
-                              <p className="font-medium text-xs text-black">
-                                Thang Ngo
-                              </p>
-                              <p className="text-xs">
-                                <span>11 Jan 2023</span>
-                                <span>5 min read</span>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </CarouselItem>
-                  <CarouselItem className="basis-1/3">
-                    <Card>
-                      <CardHeader>
-                        <CardImage
-                          src="/r4.jpg"
-                          className="w-[450px] object-cover"
-                        ></CardImage>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm font-medium">Cooking</p>
-                        <p className="text-xl font-bold">Pad Thai Recipe</p>
-                        <p className="text-xs text-gray-500">
-                          Start your day right with these easy breakfast recipes
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <div className="grid grid-cols-12 gap-2">
-                          <div className="col-span-2">
-                            <Avatar>
-                              <AvatarImage
-                                className="w-9 h-9 rounded-full"
-                                src="https://github.com/shadcn.png"
-                              />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="col-span-10">
-                            <div className="flex flex-col gap-1">
-                              <p className="font-medium text-xs text-black">
-                                Minh Ngoc
-                              </p>
-                              <p className="text-xs">
-                                <span>11 Jan 2023</span>
-                                <span>5 min read</span>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </CarouselItem>
-                  <CarouselItem className="basis-1/3">
-                    <Card>
-                      <CardHeader>
-                        <CardImage
-                          src="/r5.jpg"
-                          className="w-[450px] object-cover"
-                        ></CardImage>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm font-medium">Cooking</p>
-                        <p className="text-xl font-bold">Noodle Recipes</p>
-                        <p className="text-xs text-gray-500">
-                          Start your day right with these easy breakfast recipes
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <div className="grid grid-cols-12 gap-2">
-                          <div className="col-span-2">
-                            <Avatar>
-                              <AvatarImage
-                                className="w-9 h-9 rounded-full"
-                                src="https://github.com/shadcn.png"
-                              />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="col-span-10">
-                            <div className="flex flex-col gap-1">
-                              <p className="font-medium text-xs text-black">
-                                Dung Le
-                              </p>
-                              <p className="text-xs">
-                                <span>11 Jan 2023</span>
-                                <span>5 min read</span>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </CarouselItem>
+                  {posts.map((post, index) => (
+                    <CarouselItem
+                      key={index}
+                      className="lg:basis-1/3 md:basis-1/2 basis"
+                    >
+                      <Link href={`/home/post/${post._id}`}>
+                        <Card className="h-[400px] rounded-xl">
+                          <CardHeader>
+                            <CardImage
+                              src={post.images[0]}
+                              className="max-w-[450px] max-h-[200px] object-cover transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+                            ></CardImage>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-sm font-medium">
+                              {categoryRecord[post.categoryName]}
+                            </p>
+                            <p className="text-md font-bold">{post.title}</p>
+                            <p className="text-xs text-gray-500 line-clamp-4">
+                              {post.description}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    </CarouselItem>
+                  ))}
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />
               </Carousel>
             </div>
             <div className="flex justify-center mt-5">
-              <Button
-                className="w-[10%] mx-5 text-md font-medium"
-                variant="outline"
-              >
-                View All
-              </Button>
+              <Link href="/home">
+                <Button className=" mx-5 text-md font-medium" variant="outline">
+                  Xem thêm
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
