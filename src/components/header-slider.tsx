@@ -8,6 +8,7 @@ import { useUserStore } from "@/store/userStore";
 import { UserPlan } from "@/constants";
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
+import SSO from "./sso";
 
 const HeaderSlider = () => {
   const [open, setOpen] = useState(false);
@@ -80,7 +81,7 @@ const HeaderSlider = () => {
                 Gói dịch vụ
               </Link>
             </li>
-            {user && (
+            {user ? (
               <div>
                 <Image
                   src={user.image}
@@ -93,6 +94,10 @@ const HeaderSlider = () => {
                     setOpen((prev) => !prev);
                   }}
                 />
+              </div>
+            ) : (
+              <div>
+                <SSO />
               </div>
             )}
             {open && (
